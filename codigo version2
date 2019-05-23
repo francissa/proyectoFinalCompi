@@ -1,0 +1,51 @@
+grammar pfcGrammar;
+
+
+programas: LIBRERIAS PROGRAMAS MIPROGRAM LLAVE_ABRE 
+sentencias*
+LLAVE_CIERRA;
+sentencias:decla_variable  assig_variable | usosi |usomientras|retornar;
+decla_variable: VAR PCOMA;
+assig_variable: ASIG PCOMA;
+usosi: SI;
+usomientras: MIEN;
+retornar: RETUR PCOMA;
+
+PROGRAMAS: 'programa';
+MIPROGRAM: [ a-zA-Z ]+;
+LIBRERIAS: VAR PARE_ABRE (TIPO[0-9]|[a-zA-Z])','(TIPO[0-9]|[a-zA-Z])* PARE_CIERRA PCOMA;
+
+
+VAR: TIPO ([a-zA-Z]|'_')*([a-zA-Z]|[0-9]|'_')*;
+TIPO:'ent'|'flotante'|'booleana'|'cadena';
+ASIG: ([a-zA-Z]|'_')([a-zA-Z]|[0-9]|'_')*IGUAL([a-zA-Z]|'_')([a-zA-Z]|[0-9]|'_')*|ENT|FLOTANTE|BOOLEANA;
+ENT:[0-9]+;
+FLOTANTE:[0-9]+[0-9]+;
+BOOLEANA:'verdad'|'falso';
+CADENA:[a-zA-Z]+;
+IMPRIMIR: 'imprimir';
+
+SUMA:'+';
+RESTA:'-';
+DIV:'/';
+MULTI:'*';
+
+EXPLOGS:'=='|'!='|'>'|'>='|'<'|'<='|'!'; 
+
+CORCHETE_ABRE: '[';
+CORCHETE_CIERRA: ']';
+LLAVE_ABRE:'{';
+LLAVE_CIERRA:'}';
+PARE_ABRE:'(';
+PARE_CIERRA:')';
+IGUAL:'=';
+PCOMA:';';
+PUNTO:'.';
+RETUR:'retornar'[0-9]*|[a-z];
+SIN:'sino';
+SI: 'si'PARE_ABRE EXPLOG PARE_CIERRA LLAVE_ABRE (([a-zA-Z]*IGUAL[a-zA-Z]*)|RETUR)+PCOMA LLAVE_CIERRA |(SIN LLAVE_ABRE (([a-zA-Z]*IGUAL[a-zA-Z]*)|RETUR)+PCOMA LLAVE_CIERRA PCOMA)+;
+EXPLOG:([a-zA-Z]|'_')([a-zA-Z]|[0-9]|'_')* EXPLOGS (([a-zA-Z]|'_')([a-zA-Z]|[0-9]|'_'))|[0-9]+;
+MIEN:'mientras'PARE_ABRE EXPLOG PARE_CIERRA LLAVE_ABRE (([a-zA-Z]*IGUAL[a-zA-Z]*)|RETUR)+PCOMA LLAVE_CIERRA;
+CONCADE:'+';
+
+WS:[/t/n/r]+ -> skip;
